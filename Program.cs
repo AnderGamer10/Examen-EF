@@ -161,6 +161,8 @@ class Program
             
             //1 Filtering (cada 1)
             var q1 = db.Matriculas.Where(b => b.AlumnoId%2 == 0);
+            
+
             //1 Anomnimous tupe (cada 1)
             var q2 = db.Matriculas.Select(o => new{
                 MatriculaId = o.MatriculaId,
@@ -209,12 +211,13 @@ class Program
                 where o.AlumnoId == 1
                 orderby o.Edad
                 select o).Skip(2).Take(2);
+
             //5 Elements Opertators (cada 1)
             var q13 = db.Modulos.Single(
                 c => c.ModuloId == 3);
             var q14 = db.Modulos.SingleOrDefault(
                 c => c.ModuloId == 3); 
-            //var q15 = db.Modulos.Where( c => c.ModuloId == 4).DefaultIfEmpty(new Modulo()).Single();
+            var q15 = db.Modulos.Where( c => c.ModuloId == 4).Single();
             var q16 = db.Alumnos.Where(
                 o => o.AlumnoId == 4).
                 OrderBy(o => o.Edad).Last();
@@ -227,6 +230,7 @@ class Program
             //1 ToArray
             string[] names = (from c in db.Modulos
                                 select c.Titulo).ToArray();
+
             //1 ToDicctionary - No funciona
            /* Dictionary<int, Modulo> col = db.Modulos.ToDictionary(c => c.ModuloId);
             
@@ -237,13 +241,16 @@ class Program
                     select new { c.Name, o.Cost })
             
                     group oc by oc.Name into g
-                    select g).ToDictionary(g => g.Key, g => g.Max(oc => oc.Cost));
-            //1 ToList - No funciona
-            List<Alumno> edadSobre10 = (from o in db.Alumnos
-                    where o.Edad > 10
-                    orderby o.Edad).ToList();
+                    select g).ToDictionary(g => g.Key, g => g.Max(oc => oc.Cost));*/
 
-            //2 ILookup*/
+
+                    
+            //1 ToList - No funciona
+            /*List<Alumno> edadSobre10 = (from o in db.Alumnos
+                    where o.Edad > 10
+                    orderby o.Edad).ToList();*/
+
+            //2 ILookup
             ILookup<int, string> ModulosLookup =
                     db.Modulos.ToLookup(c => c.ModuloId, c => c.Titulo);
         }
