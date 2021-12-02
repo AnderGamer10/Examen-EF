@@ -160,18 +160,18 @@ class Program
             2 ILookup*/
             
             //1 Filtering (cada 1)
-            var q1 = db.Matriculas.Where(b => b.AlumnoId%2 == 0);
+            var q1 = db.Matriculas.Where(b => b.AlumnoId%2 == 0).ToList();
             
-
             //1 Anomnimous tupe (cada 1)
             var q2 = db.Matriculas.Select(o => new{
                 MatriculaId = o.MatriculaId,
                 AlumnosId = o.AlumnoId
-            });
+            }).ToList();
+
             //3 Ordenring  (cada 1)
-            var q3 = db.Alumnos.OrderBy(o => o.AlumnoId);
-            var q4 = db.Alumnos.OrderByDescending(o => o.AlumnoId);
-            var q5 = db.Matriculas.OrderBy(o => o.AlumnoId).ThenByDescending(o => o.ModuloId);
+            var q3 = db.Alumnos.OrderBy(o => o.AlumnoId).ToList();
+            var q4 = db.Alumnos.OrderByDescending(o => o.AlumnoId).ToList();
+            var q5 = db.Matriculas.OrderBy(o => o.AlumnoId).ThenByDescending(o => o.ModuloId).ToList();
             //2 Joining
             var q6 = db.Matriculas.Join(db.Alumnos, c => c.AlumnoId, o => o.AlumnoId,
                 (c,o) => new{
@@ -180,9 +180,9 @@ class Program
                     o.Edad,
                     o.Efectivo
                 }
-            );
+            ).ToList();
             
-            var q7 = db.Matriculas.Join(db.Modulos, c => c.ModuloId, o => o.ModuloId,(c,o) => new{c.MatriculaId,c.ModuloId,o.Titulo, o.Curso});
+            var q7 = db.Matriculas.Join(db.Modulos, c => c.ModuloId, o => o.ModuloId,(c,o) => new{c.MatriculaId,c.ModuloId,o.Titulo, o.Curso}).ToList();
             //3 Grouping
             var q8 = db.Alumnos.GroupBy(
                 o => o.AlumnoId).
@@ -190,21 +190,21 @@ class Program
                 {
                     AlumnoId = g.Key,
                     AlumnosTotales = g.Count()
-                });
+                }).ToList();
             var q9 = db.Matriculas.GroupBy(
                 o => o.MatriculaId).
                 Select(g => new
                 {
                     MatriculaId = g.Key,
                     MatriculasTotales = g.Count()
-                });
+                }).ToList();
             var q10 = db.Modulos.GroupBy(
                 o => o.ModuloId).
                 Select(g => new
                 {
                     ModuloId = g.Key,
                     ModulosTotales = g.Count()
-                });
+                }).ToList();
             //2 Paging  (cada 1)
             var q11 = db.Alumnos.Where(o => o.AlumnoId == 1).Take(3);
             var q12 = (from o in db.Alumnos
@@ -253,6 +253,15 @@ class Program
             //2 ILookup
             ILookup<int, string> ModulosLookup =
                     db.Modulos.ToLookup(c => c.ModuloId, c => c.Titulo);
+
+
+            /*
+            Pruebas de las querys
+            Añadir ToList() al final de cada query
+            */
+            foreach(var x in q1){
+                Console.WriteLine(x);
+            }      
         }
     }
 
