@@ -179,14 +179,8 @@ class Program
                     o.Efectivo
                 }
             );
-            var q7 = db.Matriculas.Join(db.Modulos, c => c.AlumnoId, o => o.AlumnoId,
-                (c,o) => new{
-                    c.MatriculaId,
-                    c.AlumnoId,
-                    o.Curso,
-                    o.Titulo
-                }
-            );
+            
+            var q7 = db.Matriculas.Join(db.Modulos, c => c.ModuloId, o => o.ModuloId,(c,o) => new{c.MatriculaId,c.ModuloId,o.Titulo, o.Curso});
             //3 Grouping
             var q8 = db.Alumnos.GroupBy(
                 o => o.AlumnoId).
@@ -220,9 +214,7 @@ class Program
                 c => c.ModuloId == 3);
             var q14 = db.Modulos.SingleOrDefault(
                 c => c.ModuloId == 3); 
-            var q15 = db.Modulos.Where(
-                c => c.ModuloId == 4
-                ).DefaultIfEmpty(new Modulo()).Single();
+            //var q15 = db.Modulos.Where( c => c.ModuloId == 4).DefaultIfEmpty(new Modulo()).Single();
             var q16 = db.Alumnos.Where(
                 o => o.AlumnoId == 4).
                 OrderBy(o => o.Edad).Last();
@@ -236,7 +228,7 @@ class Program
             string[] names = (from c in db.Modulos
                                 select c.Titulo).ToArray();
             //1 ToDicctionary - No funciona
-            Dictionary<int, Modulo> col = db.Modulos.ToDictionary(c => c.ModuloId);
+           /* Dictionary<int, Modulo> col = db.Modulos.ToDictionary(c => c.ModuloId);
             
             Dictionary<string, double> ModulosAlumnos = (from oc in
             
