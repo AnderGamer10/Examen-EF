@@ -235,12 +235,25 @@ class Program
             //1 ToArray
             string[] names = (from c in db.Modulos
                                 select c.Titulo).ToArray();
-            //1 ToDicctionary
-
-            //1 ToList
+            //1 ToDicctionary - No funciona
+            Dictionary<int, Modulo> col = db.Modulos.ToDictionary(c => c.ModuloId);
+            
+            Dictionary<string, double> ModulosAlumnos = (from oc in
+            
+                    (from o in orders
+                    join c in customers on o.CustomerID equals c.CustomerID
+                    select new { c.Name, o.Cost })
+            
+                    group oc by oc.Name into g
+                    select g).ToDictionary(g => g.Key, g => g.Max(oc => oc.Cost));
+            //1 ToList - No funciona
+            List<Alumno> edadSobre10 = (from o in db.Alumnos
+                    where o.Edad > 10
+                    orderby o.Edad).ToList();
 
             //2 ILookup*/
-            
+            ILookup<int, string> ModulosLookup =
+                    db.Modulos.ToLookup(c => c.ModuloId, c => c.Titulo);
         }
     }
 
